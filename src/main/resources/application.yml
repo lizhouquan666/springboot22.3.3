@@ -1,0 +1,37 @@
+spring:
+  application:
+    name: es-cluster
+  data:
+    elasticsearch:
+      repositories:
+        enabled: true
+      client:
+        reactive:
+          socket-timeout: 15000
+          endpoints: localhost:9200,localhost:9201
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: 5946
+    url: jdbc:mysql://localhost:3306/lv_shi?useSSL=false&serverTimezone=UTC&characterEncoding=utf8&allowPublicKeyRetrieval=true
+
+mybatis:
+  mapperLocations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+jwt:
+  #盐
+  secret: mySecret
+  #过期时间
+  expiration: 1800
+  #
+  tokenHead: bearer
+  #
+  tokenHeader: Authorization
+  #  {Authorization: "bearer sdfdsfsdfsdfdsfsdfadfdsf"}
+rabbitmq:
+  name : spirng-boot-rabbitmq-provider
+  host : 127.0.0.1
+  username : guest
+  password : guest

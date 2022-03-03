@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wanxi.mapper.ProductDao">
+    <resultMap id="ProductMapper" type="com.wanxi.entity.ProductModel">
+        <result column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="price" property="price"/>
+        <result column="normalPrice" property="normalPrice"/>
+        <result column="content" property="content"/>
+        <result column="imgHref" property="imgHref"/>
+        <result column="isTop" property="isTop"/>
+        <result column="is_show" property="is_show"/>
+        <result column="enable" property="enable"/>
+        <result column="service_id" property="service_id"/>
+        <result column="serviceTypeName" property="serviceTypeName"/>
+        <result column="serviceType" property="serviceType"/>
+    </resultMap>
+<!--    MyBatis的传入参数parameterType类型分两种-->
+
+<!--    1. 1.基本数据类型：int,string,long,Date;-->
+
+<!--    1. 2. 复杂数据类型：类和Map-->
+<!--    通过 resultType 指定查询的结果是 ProductModel 类型的数据-->
+<!--    只需要指定 resultType 的类型，MyBatis 会自动将查询的结果映射成 JavaBean 中的属性-->
+    <insert id="add" parameterType="ProductModel">
+                INSERT INTO `lv_shi`.`lv_shi_service_product` (`name`, `normal_price`, `price`, `imgHref`, `content`, `service_id`, `enable`, `is_show`)
+                 VALUES (#{name},#{normalPrice} ,#{price}, #{imgHref},#{content}, #{service_id}, #{enable}, #{is_show})
+    </insert>
+    <select id="findAll" parameterType="ProductModel" resultType="ProductModel">
+        SELECT p.*,c.name serviceTypeName FROM lv_shi_service_product p left join lv_shi_service c on  p.service_id=c.id
+<!--        <if test="start != null">-->
+<!--            where birthday between #{start}-->
+<!--        </if>-->
+<!--        <if test="name != null">-->
+<!--            <bind name="pattern" value="'%' + name + '%'"/>-->
+<!--            and name like #{pattern}-->
+<!--        </if>-->
+    </select>
+    <select id="getCount" parameterType="ProductModel" resultType="int">
+        select count(*) count from lv_shi_service_product p left join lv_shi_service c on  p.service_id=c.id
+    </select>
+    <update id="enable" parameterType="ProductModel">
+        update lv_shi_service_product
+        set enable=1 - enable
+        where id = #{id}
+    </update>
+    <select id="findById" parameterType="ProductModel" resultType="ProductModel">
+        SELECT p.*,c.name serviceTypeName FROM lv_shi_service_product p left join lv_shi_service c on  p.service_id=c.id where p.id=#{id}
+    </select>
+    <select id="findServiceType" parameterType="ProductModel" resultType="ProductModel">
+        select * from lv_shi_service  where is_show=#{enable} order by id desc
+    </select>
+    <delete id="del" parameterType="ProductModel">
+        delete from lv_shi_service_product where id=#{id}
+    </delete>
+    <update id="update" parameterType="ProductModel">
+        update lv_shi_service_product
+        set name=#{name}
+          , normalPrice=#{normalPrice}
+          , price=#{price}
+          , imgHref=#{imgHref}
+          , content=#{content}
+          , service_id=#{service_id}
+          , is_show=#{is_show}
+          , enable=#{enable}
+        where id = #{id}
+    </update>
+</mapper>
